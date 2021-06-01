@@ -27,9 +27,26 @@ fn convert_to_pig_latin(string: &String) -> String {
     }
 }
 
+fn idiomatic_pig_latin(string: &str) -> String {
+    if string.is_empty() {
+        return String::new();
+    }
+
+    let first_char = string.chars().nth(0).unwrap();
+    if "aeiouy".contains(first_char) {
+        format!("{}-hay", string)
+    } else {
+        format!("{}-{}ay", &string[first_char.len_utf8()..], &first_char)
+    }
+}
+
 fn main() {
     let test = String::from("car");
 
     println!("initial string = {}", &test);
     println!("translated string = {}", &convert_to_pig_latin(&test));
+    println!(
+        "idiomatic translated string = {}",
+        &idiomatic_pig_latin(&test)
+    );
 }
