@@ -31,7 +31,7 @@ fn main() {
                     .expect("Failed to read your department");
 
                 let department = department.trim().to_lowercase();
-                let department_entry = departments.entry(department).or_insert(Vec::new());
+                let department_entry = departments.entry(department).or_insert_with(Vec::new);
 
                 let mut employee = String::new();
 
