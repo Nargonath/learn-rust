@@ -23,5 +23,12 @@ fn largest_clone<T: PartialOrd + Clone>(list: &[T]) -> T {
 }
 
 fn main() {
-    println!("Hello, world!");
+    let sequence = [
+        String::from("abc"),
+        String::from("abcd"),
+        String::from("ab"),
+    ];
+
+    let largest_string = largest_clone(&sequence);
+    println!("largest = {}", largest_string);
 }
