@@ -22,6 +22,18 @@ fn largest_clone<T: PartialOrd + Clone>(list: &[T]) -> T {
     largest
 }
 
+fn largest_pointer<T: PartialOrd>(list: &[T]) -> &T {
+    let mut largest = &list[0];
+
+    for item in list {
+        if item > largest {
+            largest = item;
+        }
+    }
+
+    largest
+}
+
 fn main() {
     let sequence = [
         String::from("abc"),
@@ -30,5 +42,8 @@ fn main() {
     ];
 
     let largest_string = largest_clone(&sequence);
+    println!("largest = {}", largest_string);
+
+    let largest_string = largest_pointer(&sequence);
     println!("largest = {}", largest_string);
 }
