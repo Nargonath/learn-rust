@@ -1,6 +1,7 @@
 use std::error::Error;
 use std::fs;
 
+#[derive(Debug, PartialEq)]
 pub struct Config {
     pub query: String,
     pub filename: String,
@@ -42,5 +43,32 @@ mod tests {
         if let Err(actual) = result {
             assert_eq!(expected, actual, "does not have proper error label");
         };
+    }
+
+    #[test]
+    fn config_new_success() {
+        let query = String::from("query");
+        let filename = String::from("poem.txt");
+        let args = vec![
+            String::from("test-program"),
+            query.clone(),
+            filename.clone(),
+        ];
+
+        let result = super::Config::new(&args);
+
+        assert!(result.is_ok(), "should be Ok()");
+
+        let expected = super::Config {
+            query: query.clone(),
+            filename: filename.clone(),
+        };
+        let actual = result.unwrap();
+
+        assert_eq!(
+            expected, actual,
+            "should return Config with query = {} and filename = {}",
+            query, filename
+        );
     }
 }
