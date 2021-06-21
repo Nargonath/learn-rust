@@ -26,3 +26,21 @@ pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
 
     Ok(())
 }
+
+#[cfg(test)]
+mod tests {
+
+    #[test]
+    fn config_new_errors_when_less_than_three_args() {
+        let args = vec![String::from("test-program")];
+        let expected = "not enough arguments";
+
+        let result = super::Config::new(&args);
+
+        assert!(result.is_err(), "should return an error");
+
+        if let Err(actual) = result {
+            assert_eq!(expected, actual, "does not have proper error label");
+        };
+    }
+}
