@@ -23,20 +23,24 @@ impl Config {
 pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
     let contents = fs::read_to_string(config.filename)?;
 
-    println!("With text:\n{}", contents);
-
     Ok(())
+}
+
+pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
+    vec![]
 }
 
 #[cfg(test)]
 mod tests {
+
+    use super::*;
 
     #[test]
     fn config_new_errors_when_less_than_three_args() {
         let args = vec![String::from("test-program")];
         let expected = "not enough arguments";
 
-        let result = super::Config::new(&args);
+        let result = Config::new(&args);
 
         assert!(result.is_err(), "should return an error");
 
@@ -55,11 +59,11 @@ mod tests {
             filename.clone(),
         ];
 
-        let result = super::Config::new(&args);
+        let result = Config::new(&args);
 
         assert!(result.is_ok(), "should be Ok()");
 
-        let expected = super::Config {
+        let expected = Config {
             query: query.clone(),
             filename: filename.clone(),
         };
@@ -70,5 +74,16 @@ mod tests {
             "should return Config with query = {} and filename = {}",
             query, filename
         );
+    }
+
+    #[test]
+    fn search_success() {
+        let query = "duct";
+        let contents = "\
+Rust:
+safe, fast, productive.
+Pick three.";
+
+        assert_eq!(vec!["safe, fast, productive."], search(query, contents));
     }
 }
