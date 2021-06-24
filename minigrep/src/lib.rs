@@ -17,7 +17,8 @@ impl Config {
 
         let query = args[1].clone();
         let filename = args[2].clone();
-        let case_sensitive = env::var("CASE_INSENSITIVE").is_err();
+        let case_insensitive_flag = args.len() == 4 && args[3] == "--case-insensitive";
+        let case_sensitive = !case_insensitive_flag && env::var("CASE_INSENSITIVE").is_err();
 
         Ok(Config {
             query,
@@ -112,6 +113,35 @@ mod tests {
             expected, actual,
             "should return Config with query = {} and filename = {}",
             query, filename
+        );
+    }
+
+    #[test]
+    fn config_case_insensitive_flag() {
+        let query = String::from("To");
+        let filename = String::from("test.txt");
+        let args = vec![
+            String::from("test-program"),
+            query.clone(),
+            filename.clone(),
+            String::from("--case-insensitive"),
+        ];
+
+        let result = Config::new(&args);
+
+        assert!(result.is_ok(), "should be Ok()");
+
+        let expected = Config {
+            query,
+            filename,
+            case_sensitive: false,
+        };
+
+        let actual = result.unwrap();
+
+        assert_eq!(
+            expected, actual,
+            "Should return Config with case_sensitive = false"
         );
     }
 
