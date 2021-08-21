@@ -50,6 +50,12 @@ struct Worker {
 }
 
 impl Worker {
+    // NOTE: This implementation didn't work because the for loop doesn't drop temporary value
+    // in its right hand component until the end of its associated block unlike the let operator.
+    // This means the MutexGuard, returned by .lock(), responsible for holding the lock is kept alive until the
+    // job callback is done running which prevents the others worker to pick up a job in the
+    // meantime.
+    //
     // fn new(id: usize, receiver: Arc<Mutex<mpsc::Receiver<Job>>>) -> Worker {
     //     let thread = thread::spawn(move || {
     //         for job in (*receiver.lock().unwrap()).iter() {
